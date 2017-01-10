@@ -1,0 +1,9 @@
+[submodule "Universal Content Builder"]
+	path = Universal Content Builder
+	url = https://github.com/AGN-Pokemon-3D/Pokemon-3D-Universal-Content-Builder.git
+[submodule "2.5DHero/2.5DHeroContent/MonoGame/DesktopGL"]
+	path = 2.5DHero/2.5DHeroContent/MonoGame/DesktopGL
+	url = https://github.com/AGN-Pokemon-3D/Pokemon-3D-2.5DHero-2.5DHeroContent-MonoGame-DesktopGL.git
+[submodule "2.5DHero/2.5DHeroContent/XNA"]
+	path = 2.5DHero/2.5DHeroContent/XNA
+	url = https://github.com/AGN-Pokemon-3D/Pokemon-3D-2.5DHero-2.5DHeroContent-XNA.git
