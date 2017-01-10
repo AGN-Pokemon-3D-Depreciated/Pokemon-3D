@@ -9,8 +9,6 @@ platform:
 clone_depth: 1
 init:
 - cmd: git config --global core.autocrlf true
-clone_script:
-- cmd: git submodule update --init --recursive
 assembly_info:
   patch: true
   file: '**\AssemblyInfo.*'
@@ -201,7 +199,10 @@ install:
     7z x -y $downloadLocation -o"$currentLocation"
 cache: XNAGS40_setup.exe
 before_build:
-- cmd: nuget restore 2.5DHero.sln
+- cmd: >-
+    git submodule update --init --recursive
+
+    nuget restore 2.5DHero.sln
 build:
   project: 2.5DHero.sln
   parallel: true
