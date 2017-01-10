@@ -1,4 +1,6 @@
-﻿Imports System.Windows.Forms
+﻿#If XNA Then
+Imports System.Windows.Forms
+#End If
 
 ''' <summary>
 ''' Controls the game's main workflow.
@@ -10,7 +12,7 @@ Public Class GameController
     ''' <summary>
     ''' The current version of the game.
     ''' </summary>
-    Public Const GAMEVERSION As String = "0.54"
+    Public Const GAMEVERSION As String = "0.54.1"
 
     ''' <summary>
     ''' The number of released iterations of the game.
@@ -56,12 +58,14 @@ Public Class GameController
         Window.AllowUserResizing = True
         AddHandler Window.ClientSizeChanged, AddressOf Window_ClientSizeChanged
 
-        'Dim gameForm As Form = CType(Form.FromHandle(Window.Handle), Form)
-        'gameForm.MinimumSize = New System.Drawing.Size(600, 360)
+#If XNA Then
+        Dim gameForm As Form = CType(Form.FromHandle(Window.Handle), Form)
+        gameForm.MinimumSize = New Drawing.Size(600, 360)
+#End If
 
         FPSMonitor = New FPSMonitor()
 
-        GameHacked = System.IO.File.Exists(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\temp")
+        GameHacked = File.Exists(My.Computer.FileSystem.SpecialDirectories.CurrentUserApplicationData & "\temp")
         If GameHacked = True Then
             Security.HackerAlerts.Activate()
         End If
@@ -102,7 +106,7 @@ Public Class GameController
         End Get
     End Property
 
-    Protected Overrides Sub OnExiting(sender As Object, args As System.EventArgs)
+    Protected Overrides Sub OnExiting(sender As Object, args As EventArgs)
         GameJolt.SessionManager.Close()
 
         If Core.ServersManager.ServerConnection.Connected = True Then

@@ -38,11 +38,19 @@
         SpriteBatch = New CoreSpriteBatch(GraphicsDevice)
         window = GameInstance.Window
 
-        If CommandLineArgHandler.ForceGraphics = True Then
-            window.Title = GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " (FORCED GRAPHICS)"
+#If XNA Then
+        If CommandLineArgHandler.ForceGraphics Then
+            window.Title = "[XNA] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " (FORCED GRAPHICS)"
         Else
-            window.Title = GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE
+            window.Title = "[XNA] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " " & GameController.GAMEVERSION
         End If
+#ElseIf MONOGAME Then
+        If CommandLineArgHandler.ForceGraphics Then
+            window.Title = "[MonoGame] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " (FORCED GRAPHICS)"
+        Else
+            window.Title = "[MonoGame] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " " & GameController.GAMEVERSION
+        End If
+#End If
 
         GameOptions = New GameOptions()
         GameOptions.LoadOptions()
@@ -55,7 +63,6 @@
         windowSize = New Rectangle(0, 0, CInt(GameOptions.WindowSize.X), CInt(GameOptions.WindowSize.Y))
 
         GraphicsManager.PreferMultiSampling = True
-
         GraphicsManager.ApplyChanges()
 
         Canvas.SetupCanvas()
@@ -103,17 +110,17 @@
             Logger.Log(Logger.LogTypes.Warning, "Core.vb: File Validation failed! Download a fresh copy of the game to fix this issue.")
         End If
 
-        GameMessage = New GameMessage(net.Pokemon3D.Game.TextureManager.DefaultTexture, New Size(10, 40), New Vector2(0, 0))
-        GameMessage.Dock = net.Pokemon3D.Game.GameMessage.DockStyles.Top
+        GameMessage = New GameMessage(TextureManager.DefaultTexture, New Size(10, 40), New Vector2(0, 0))
+        GameMessage.Dock = GameMessage.DockStyles.Top
         GameMessage.BackgroundColor = Color.Black
         GameMessage.TextPosition = New Vector2(10, 10)
         Logger.Debug("Gamemessage initialized.")
 
         GameOptions.LoadOptions()
 
-        If System.IO.Directory.Exists(GameController.GamePath & "\Temp") = True Then
+        If Directory.Exists(GameController.GamePath & "\Temp") = True Then
             Try
-                System.IO.Directory.Delete(GameController.GamePath & "\Temp", True)
+                Directory.Delete(GameController.GamePath & "\Temp", True)
                 Logger.Log(Logger.LogTypes.Message, "Core.vb: Deleted Temp directory.")
             Catch ex As Exception
                 Logger.Log(Logger.LogTypes.Warning, "Core.vb: Failed to delete the Temp directory.")
@@ -240,7 +247,7 @@
         Return v
     End Function
 
-    Public Sub StartThreadedSub(ByVal s As System.Threading.ParameterizedThreadStart)
+    Public Sub StartThreadedSub(ByVal s As Threading.ParameterizedThreadStart)
         Dim t As New Threading.Thread(s)
         t.IsBackground = True
         t.Start()

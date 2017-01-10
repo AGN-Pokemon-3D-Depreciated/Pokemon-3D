@@ -7,7 +7,7 @@ Public Class TextureManager
     End Sub
 
     Public Shared TextureList As New Dictionary(Of String, Texture2D)
-    Public Shared TextureRectList As New Dictionary(Of KeyValuePair(Of Int32, Rectangle), Texture2D)
+    Public Shared TextureRectList As New Dictionary(Of KeyValuePair(Of Integer, Rectangle), Texture2D)
 
     ''' <summary>
     ''' Returns a texture.
@@ -130,9 +130,9 @@ Public Class TextureManager
     End Function
 
     Public Shared Function GetTexture(ByVal Texture As Texture2D, ByVal Rectangle As Rectangle, Optional ByVal Factor As Integer = 1) As Texture2D
-        Dim tex As Texture2D
-        
-        If TextureRectList.TryGetValue(New KeyValuePair(Of Int32, Rectangle)(Texture.GetHashCode(), Rectangle), tex) then
+        Dim tex As Texture2D = Nothing
+
+        If TextureRectList.TryGetValue(New KeyValuePair(Of Int32, Rectangle)(Texture.GetHashCode(), Rectangle), tex) Then
             Return tex
         End If
 

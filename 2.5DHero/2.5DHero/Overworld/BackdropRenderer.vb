@@ -172,8 +172,11 @@
                 pass.Apply()
                 GraphicsDevice.SetVertexBuffer(vBuffer)
                 GraphicsDevice.Indices = iBuffer
-                'GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count, 0, Indicies.Count)
+#If XNA Then
+                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count, 0, Indicies.Count)
+#Else
                 GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count)
+#End If
             Next
 
             vBuffer.Dispose()

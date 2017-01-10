@@ -1,5 +1,10 @@
 The game is not in active development by nilllzz anymore, but few people from the community are maintaining the game and porting it to MonoGame platform. You are free to fork and redistribute the code under the [GNU GPLv3 license](http://choosealicense.com/licenses/gpl-3.0/).
 
+**MonoGame Master Branch:** | **MonoGame Lastest:**
+---------------- | ---------------------
+[![Build status](https://ci.appveyor.com/api/projects/status/fn47q75lltwtfprb/branch/master?svg=true)](https://ci.appveyor.com/project/jianmingyong/pokemon-3d/branch/master) | [![Build status](https://ci.appveyor.com/api/projects/status/fn47q75lltwtfprb?svg=true)](https://ci.appveyor.com/project/jianmingyong/pokemon-3d)
+
+
 Build instructions (game)
 =========================
 

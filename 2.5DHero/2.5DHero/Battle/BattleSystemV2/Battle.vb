@@ -1372,6 +1372,10 @@
             'Own Pokémon move animation! This displays any effects that should display on the user of the move.
             moveUsed.UserPokemonMoveAnimation(BattleScreen)
 
+            Dim cam As QueryObject = BattleScreen.FocusBattle()
+            CType(cam, CameraQueryObject).SetTargetToStart()
+            BattleScreen.BattleQuery.AddRange({cam, New MoveAnimationQueryObject()})
+
             If moveUsed.Target <> Attack.Targets.Self And moveUsed.FocusOppPokemon = True Then
                 If own = True Then
                     Dim ca As QueryObject = BattleScreen.FocusOppPokemon()

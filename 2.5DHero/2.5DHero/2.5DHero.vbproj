@@ -1,78 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Common.props') And '$(Platform)' == 'DesktopGL'" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">DesktopGL</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}</ProjectGuid>
+    <ProjectGuid>{9E0AFC66-3941-4725-856B-D328C45C35A6}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>My Project</AppDesignerFolder>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>net.Pokemon3D.Game</RootNamespace>
-    <AssemblyName>Pokemon3D</AssemblyName>
+    <AssemblyName>Pokemon</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MonoGamePlatform>DesktopGL</MonoGamePlatform>
-    <MonoGameContentBuilderExe>
-    </MonoGameContentBuilderExe>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <MonoGamePlatform Condition=" '$(Platform)' == 'DesktopGL' ">DesktopGL</MonoGamePlatform>
+    <XnaFrameworkVersion Condition=" '$(Platform)' == 'XNA' ">v4.0</XnaFrameworkVersion>
+    <XnaPlatform Condition=" '$(Platform)' == 'XNA' ">Windows</XnaPlatform>
+    <XnaProfile Condition=" '$(Platform)' == 'XNA' ">Reach</XnaProfile>
+    <XnaOutputType Condition=" '$(Platform)' == 'XNA' ">Game</XnaOutputType>
+    <XnaCompressContent Condition=" '$(Platform)' == 'XNA' ">true</XnaCompressContent>
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath Condition=" '$(Configuration)|$(Platform)' == 'Debug|DesktopGL' Or '$(Configuration)|$(Platform)' == 'DebugNoContent|DesktopGL' ">bin\MonoGame\DesktopGL\Debug\</OutputPath>
+    <OutputPath Condition=" '$(Configuration)|$(Platform)' == 'Release|DesktopGL' Or '$(Configuration)|$(Platform)' == 'ReleaseNoContent|DesktopGL' ">bin\MonoGame\DesktopGL\Release\</OutputPath>
+    <OutputPath Condition=" '$(Configuration)|$(Platform)' == 'Debug|XNA' Or '$(Configuration)|$(Platform)' == 'DebugNoContent|XNA' ">bin\XNA\Debug\</OutputPath>
+    <OutputPath Condition=" '$(Configuration)|$(Platform)' == 'Release|XNA' Or '$(Configuration)|$(Platform)' == 'ReleaseNoContent|XNA' ">bin\XNA\Release\</OutputPath>
+    <DebugSymbols Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugNoContent' ">true</DebugSymbols>
+    <DebugType Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugNoContent' ">full</DebugType>
+    <DebugType Condition=" '$(Configuration)' == 'Release' Or '$(Configuration)' == 'ReleaseNoContent' ">none</DebugType>
+    <Optimize Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugNoContent' ">false</Optimize>
+    <Optimize Condition=" '$(Configuration)' == 'Release' Or '$(Configuration)' == 'ReleaseNoContent' ">true</Optimize>
+    <DefineConstants Condition=" '$(Platform)' == 'DesktopGL' ">MONOGAME,DESKTOPGL</DefineConstants>
+    <DefineConstants Condition=" '$(Platform)' == 'XNA' ">XNA,WINDOWS</DefineConstants>
+    <DefineDebug Condition=" '$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugNoContent' ">true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
     <ApplicationIcon>Pokemon3D.ico</ApplicationIcon>
+    <StartupObject>net.Pokemon3D.Game.Program</StartupObject>
     <OptionExplicit>On</OptionExplicit>
-    <OptionCompare>Binary</OptionCompare>
+    <OptionCompare>Text</OptionCompare>
     <OptionStrict>Off</OptionStrict>
     <OptionInfer>On</OptionInfer>
-    <StartupObject>net.Pokemon3D.Game.Program</StartupObject>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <DisableFastUpToDateCheck>true</DisableFastUpToDateCheck>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug' Or '$(Configuration)' == 'DebugNoContent'">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\DesktopGL\Debug\</OutputPath>
-    <DefineConstants>DEBUG,TRACE,WINDOWS</DefineConstants>
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <OutputPath>bin\DesktopGL\Release\</OutputPath>
-    <DefineConstants>TRACE,WINDOWS</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>none</DebugType>
-  </PropertyGroup>
-  <ItemGroup>
-    <Content Include="Pokemon3D.ico" />
-    <Content Include="Pokemon\Items\_itemList.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Reference Include="OpenTK">
-      <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\DesktopGL\OpenTK.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoGame.Framework">
-      <HintPath>$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-    <Import Include="Microsoft.VisualBasic" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.Diagnostics" />
-    <Import Include="System.Linq" />
-    <Import Include="System.IO" />
-    <Import Include="System" />
-    <Import Include="Microsoft.Xna.Framework" />
-    <Import Include="Microsoft.Xna.Framework.Graphics" />
-    <Import Include="Microsoft.Xna.Framework.Input" />
-    <Import Include="Microsoft.Xna.Framework.Content" />
-    <Import Include="Microsoft.Xna.Framework.Media" />
-    <Import Include="Microsoft.Xna.Framework.Audio" />
-    <Content Include="credits.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <None Include="My Project\app.manifest" />
-    <None Include="app.config" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="Battle\BattleAnimations\BAMove.vb" />
     <Compile Include="Battle\BattleAnimations\BAOpacity.vb" />
@@ -180,7 +151,6 @@
     <Compile Include="Input\KeyCharConverter.vb" />
     <Compile Include="Input\MouseHandler.vb" />
     <Compile Include="Modules\Extensions.vb" />
-    <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="Network\Chat.vb" />
     <Compile Include="Network\ChatScreen.vb" />
     <Compile Include="Network\DownloadTexture2D.vb" />
@@ -1566,6 +1536,7 @@
     <Compile Include="Pokemon\Monster\Shedinja.vb" />
     <Compile Include="Pokemon\Wild\FrontierSpawner.vb" />
     <Compile Include="Pokemon\Wild\Spawner.vb" />
+    <Compile Include="Properties\AssemblyInfo.vb" />
     <Compile Include="Resources\ContentPackManager.vb" />
     <Compile Include="Resources\FontContainer.vb" />
     <Compile Include="Resources\FontManager.vb" />
@@ -1715,14 +1686,66 @@
     <Compile Include="World\SkyDome.vb" />
     <Compile Include="World\Terrain.vb" />
     <Compile Include="World\World.vb" />
-    <MonoGameContentReference Include="..\2.5DHeroContent\Content.mgcb" />
   </ItemGroup>
-  <!-- Specify the search path explicitly so the ResolveAssemblyReferences task picks the right ones -->
-  <Target Name="BeforeResolveReferences">
-    <CreateProperty Value="$(MSBuildProgramFiles32)\MonoGame\v3.0\Assemblies\Windows,$(AssemblySearchPaths)">
-      <Output TaskParameter="Value" PropertyName="AssemblySearchPaths" />
-    </CreateProperty>
-  </Target>
+  <ItemGroup Condition=" '$(Platform)' == 'DesktopGL' And Exists('$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\') ">
+    <Reference Include="OpenTK">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="NVorbis">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\NVorbis.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoGame.Framework">
+      <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\MonoGame.Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Platform)' == 'DesktopGL' And !Exists('$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\DesktopGL\') ">
+    <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\OpenTK.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NVorbis, Version=0.8.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\NVorbis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MonoGame.Framework, Version=3.5.1.1679, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\MonoGame.Framework.DesktopGL.3.5.1.1679\lib\net40\MonoGame.Framework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Platform)' == 'XNA' ">
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.IO" />
+    <Import Include="System.Linq" />
+    <Import Include="Microsoft.Xna.Framework" />
+    <Import Include="Microsoft.Xna.Framework.Audio" />
+    <Import Include="Microsoft.Xna.Framework.Content" />
+    <Import Include="Microsoft.Xna.Framework.Graphics" />
+    <Import Include="Microsoft.Xna.Framework.Input" />
+    <Import Include="Microsoft.Xna.Framework.Media" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Pokemon3D.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <Import Condition=" '$(Configuration)' != 'DebugNoContent' " Project="MonoGame.Content.Builder.targets" />
+  <Target Name="BeforeBuild">
+    <Exec Condition=" '$(OS)' == 'Windows_NT' And '$(Platform)' == 'DesktopGL' And '$(Configuration)' == 'Debug' " Command="&quot;$(ProjectDir)..\..\Universal Content Builder\Universal Content Builder\bin\x64\Release\Universal Content Builder.exe&quot; &quot;/OutputDir:'$(ProjectDir)$(OutputPath)'&quot; &quot;/IntermediateDir:'$(ProjectDir)obj\MonoGame\DesktopGL\Debug\'&quot; /Platform:$(Platform) /Profile:Reach /Compress:True /GenerateMeta:True" WorkingDirectory="$(ProjectDir)..\2.5DHeroContent\MonoGame\DesktopGL\" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' And '$(Platform)' == 'DesktopGL' And '$(Configuration)' == 'Release' " Command="&quot;$(ProjectDir)..\..\Universal Content Builder\Universal Content Builder\bin\x64\Release\Universal Content Builder.exe&quot; &quot;/OutputDir:'$(ProjectDir)$(OutputPath)'&quot; &quot;/IntermediateDir:'$(ProjectDir)obj\MonoGame\DesktopGL\Release\'&quot; /Platform:$(Platform) /Profile:Reach /Compress:True /GenerateMeta:True" WorkingDirectory="$(ProjectDir)..\2.5DHeroContent\MonoGame\DesktopGL\" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' And '$(Platform)' == 'XNA' And '$(Configuration)' == 'Debug' " Command="&quot;$(ProjectDir)..\..\Universal Content Builder\Universal Content Builder\bin\x86\Release\Universal Content Builder.exe&quot; &quot;/OutputDir:'$(ProjectDir)$(OutputPath)'&quot; &quot;/IntermediateDir:'$(ProjectDir)obj\XNA\Debug\'&quot; /Platform:$(Platform) /Profile:Reach /Compress:True /GenerateMeta:True" WorkingDirectory="$(ProjectDir)..\2.5DHeroContent\XNA\" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' And '$(Platform)' == 'XNA' And '$(Configuration)' == 'Release' " Command="&quot;$(ProjectDir)..\..\Universal Content Builder\Universal Content Builder\bin\x86\Release\Universal Content Builder.exe&quot; &quot;/OutputDir:'$(ProjectDir)$(OutputPath)'&quot; &quot;/IntermediateDir:'$(ProjectDir)obj\XNA\Release\'&quot; /Platform:$(Platform) /Profile:Reach /Compress:True /GenerateMeta:True" WorkingDirectory="$(ProjectDir)..\2.5DHeroContent\XNA\" />
+  </Target>
 </Project>

@@ -3,21 +3,53 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "2.5DHero", "2.5DHero\2.5DHero\2.5DHero.vbproj", "{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "2.5DHero", "2.5DHero\2.5DHero\2.5DHero.vbproj", "{9E0AFC66-3941-4725-856B-D328C45C35A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79} = {EE057806-FAE2-4F37-B85B-A5DE693E6E79}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Universal Content Builder", "Universal Content Builder\Universal Content Builder\Universal Content Builder.csproj", "{EE057806-FAE2-4F37-B85B-A5DE693E6E79}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		DebugNoContent|Any CPU = DebugNoContent|Any CPU
-		Release|Any CPU = Release|Any CPU
+		Debug|DesktopGL = Debug|DesktopGL
+		Debug|XNA = Debug|XNA
+		DebugNoContent|DesktopGL = DebugNoContent|DesktopGL
+		DebugNoContent|XNA = DebugNoContent|XNA
+		Release|DesktopGL = Release|DesktopGL
+		Release|XNA = Release|XNA
+		ReleaseNoContent|DesktopGL = ReleaseNoContent|DesktopGL
+		ReleaseNoContent|XNA = ReleaseNoContent|XNA
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}.DebugNoContent|Any CPU.ActiveCfg = DebugNoContent|Any CPU
-		{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}.DebugNoContent|Any CPU.Build.0 = DebugNoContent|Any CPU
-		{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AAF65BE-C81D-4663-ABF4-E2E09B16E12F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Debug|DesktopGL.ActiveCfg = Debug|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Debug|DesktopGL.Build.0 = Debug|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Debug|XNA.ActiveCfg = Debug|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Debug|XNA.Build.0 = Debug|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.DebugNoContent|DesktopGL.ActiveCfg = DebugNoContent|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.DebugNoContent|DesktopGL.Build.0 = DebugNoContent|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.DebugNoContent|XNA.ActiveCfg = DebugNoContent|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.DebugNoContent|XNA.Build.0 = DebugNoContent|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Release|DesktopGL.ActiveCfg = Release|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Release|DesktopGL.Build.0 = Release|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Release|XNA.ActiveCfg = Release|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.Release|XNA.Build.0 = Release|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.ReleaseNoContent|DesktopGL.ActiveCfg = ReleaseNoContent|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.ReleaseNoContent|DesktopGL.Build.0 = ReleaseNoContent|DesktopGL
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.ReleaseNoContent|XNA.ActiveCfg = ReleaseNoContent|XNA
+		{9E0AFC66-3941-4725-856B-D328C45C35A6}.ReleaseNoContent|XNA.Build.0 = ReleaseNoContent|XNA
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Debug|DesktopGL.ActiveCfg = Release|x64
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Debug|DesktopGL.Build.0 = Release|x64
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Debug|XNA.ActiveCfg = Release|x86
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Debug|XNA.Build.0 = Release|x86
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.DebugNoContent|DesktopGL.ActiveCfg = Release|x64
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.DebugNoContent|XNA.ActiveCfg = Release|x86
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Release|DesktopGL.ActiveCfg = Release|x64
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Release|DesktopGL.Build.0 = Release|x64
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Release|XNA.ActiveCfg = Release|x86
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.Release|XNA.Build.0 = Release|x86
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.ReleaseNoContent|DesktopGL.ActiveCfg = Release|x64
+		{EE057806-FAE2-4F37-B85B-A5DE693E6E79}.ReleaseNoContent|XNA.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
