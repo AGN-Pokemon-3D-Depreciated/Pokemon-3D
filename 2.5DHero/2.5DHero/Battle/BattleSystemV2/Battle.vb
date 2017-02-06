@@ -7,6 +7,7 @@
 
 
         Public IsAfterFaint As Boolean = False
+        Public WildHasEscaped As Boolean = False
 #Region "StartRound"
 
         Public Structure RoundConst
@@ -1038,12 +1039,19 @@
             'op: the target pokemon
             Dim p As Pokemon = BattleScreen.OwnPokemon
             Dim op As Pokemon = BattleScreen.OppPokemon
-
+            If own Then
+                BattleScreen.FieldEffects.OwnLastMove = moveUsed
+            Else
+                BattleScreen.FieldEffects.OppLastMove = moveUsed
+            End If
             If Not own Then
                 p = BattleScreen.OppPokemon
                 op = BattleScreen.OwnPokemon
             End If
-
+            If WildHasEscaped Then
+                WildHasEscaped = False
+                Exit Sub
+            End If
             'Transform Aegislash with Stance Change ability.
             If p.Ability.Name.ToLower() = "stance change" AndAlso p.Number = 681 Then
                 If p.AdditionalData = "" Then
@@ -1101,6 +1109,7 @@
             End If
 
             If p.Status = Pokemon.StatusProblems.Sleep Then
+                moveUsed.IsSleeping(own, BattleScreen)
                 Dim sleepTurns As Integer = BattleScreen.FieldEffects.OwnSleepTurns
                 If Not own Then
                     sleepTurns = BattleScreen.FieldEffects.OppSleepTurns
@@ -1223,6 +1232,7 @@
                         Dim a As Attack = New ConfusionAttack()
                         Dim damage As Integer = BattleCalculation.CalculateDamage(a, False, True, True, BattleScreen)
                         ReduceHP(damage, own, own, BattleScreen, p.GetDisplayName() & " hurt itself in confusion.", "confusiondamage")
+                        moveUsed.HurtItselfInConfusion(own, BattleScreen)
                         Exit Sub
                     End If
                 End If
@@ -1930,6 +1940,7 @@
                                                     InflictParalysis(own, Not own, BattleScreen, op.GetDisplayName() & "'s Effect Spore affects " & p.GetDisplayName() & "!", "effectspore")
                                                 Else
                                                     InflictSleep(own, Not own, BattleScreen, -1, op.GetDisplayName() & "'s Effect Spore affects " & p.GetDisplayName() & "!", "effectspore")
+                                                    i = TimesToAttack
                                                 End If
                                             End If
                                         End If
@@ -2747,7 +2758,6 @@
                                                 End If
                                             End If
                                         End If
-
                                         Return True
                                     End If
                                 End If
@@ -4454,8 +4464,12 @@
 
         Private Sub EndTurnOwn(ByVal BattleScreen As BattleScreen)
             With BattleScreen
-                'Turn count
+                'Turn count (currently used for Fake Out only)
                 .FieldEffects.OwnPokemonTurns += 1
+                If HasSwitchedInOwn Then
+                    .FieldEffects.OwnPokemonTurns = 0
+                    HasSwitchedInOwn = False
+                End If
 
                 .FieldEffects.OwnLockOn = 0 'Reset lock-on
 
@@ -4617,7 +4631,7 @@
                 'Sandstorm
                 If .FieldEffects.Weather = BattleWeather.WeatherTypes.Sandstorm Then
                     If .OwnPokemon.Type1.Type <> Element.Types.Ground And .OwnPokemon.Type2.Type <> Element.Types.Ground And .OwnPokemon.Type1.Type <> Element.Types.Steel And .OwnPokemon.Type2.Type <> Element.Types.Steel And .OwnPokemon.Type1.Type <> Element.Types.Rock And .OwnPokemon.Type2.Type <> Element.Types.Rock Then
-                        Dim sandAbilities() As String = {"sand veil", "sand rush", "sand force", "overcoat", "magic guard"}
+                        Dim sandAbilities() As String = {"sand veil", "sand rush", "sand force", "overcoat", "magic guard", "cloud nine"}
                         If sandAbilities.Contains(.OwnPokemon.Ability.Name.ToLower()) = False Then
                             If .OwnPokemon.HP > 0 Then
                                 Dim sandHP As Integer = CInt(.OwnPokemon.MaxHP / 16)
@@ -4630,7 +4644,7 @@
                 'Hailstorm
                 If .FieldEffects.Weather = BattleWeather.WeatherTypes.Hailstorm Then
                     If .OwnPokemon.Type1.Type <> Element.Types.Ice And .OwnPokemon.Type2.Type <> Element.Types.Ice Then
-                        Dim hailAbilities() As String = {"ice body", "snow cloak", "overcoat", "magic guard"}
+                        Dim hailAbilities() As String = {"ice body", "snow cloak", "overcoat", "magic guard", "cloud nine"}
                         If hailAbilities.Contains(.OwnPokemon.Ability.Name.ToLower()) = False Then
                             If .OwnPokemon.HP > 0 Then
                                 Dim hailHP As Integer = CInt(.OwnPokemon.MaxHP / 16)
@@ -5184,8 +5198,12 @@
 
         Private Sub EndTurnOpp(ByVal BattleScreen As BattleScreen)
             With BattleScreen
-                'Turn count
+                'Turn count (Currently used for Fake Out only)
                 .FieldEffects.OppPokemonTurns += 1
+                If HasSwitchedInOpp Then
+                    .FieldEffects.OppPokemonTurns = 0
+                    HasSwitchedInOpp = False
+                End If
 
                 .FieldEffects.OppLockOn = 0 'Reset lock on
 
@@ -5342,7 +5360,7 @@
                 'Sandstorm
                 If .FieldEffects.Weather = BattleWeather.WeatherTypes.Sandstorm Then
                     If .OppPokemon.Type1.Type <> Element.Types.Ground And .OppPokemon.Type2.Type <> Element.Types.Ground And .OppPokemon.Type1.Type <> Element.Types.Steel And .OppPokemon.Type2.Type <> Element.Types.Steel And .OppPokemon.Type1.Type <> Element.Types.Rock And .OppPokemon.Type2.Type <> Element.Types.Rock Then
-                        Dim sandAbilities() As String = {"sand veil", "sand rush", "sand force", "overcoat", "magic guard"}
+                        Dim sandAbilities() As String = {"sand veil", "sand rush", "sand force", "overcoat", "magic guard", "cloud nine"}
                         If sandAbilities.Contains(.OppPokemon.Ability.Name.ToLower()) = False Then
                             If .OppPokemon.HP > 0 Then
                                 Dim sandHP As Integer = CInt(.OppPokemon.MaxHP / 16)
@@ -5355,7 +5373,7 @@
                 'Hailstorm
                 If .FieldEffects.Weather = BattleWeather.WeatherTypes.Hailstorm Then
                     If .OppPokemon.Type1.Type <> Element.Types.Ice And .OppPokemon.Type2.Type <> Element.Types.Ice Then
-                        Dim hailAbilities() As String = {"ice body", "snow cloak", "overcoat", "magic guard"}
+                        Dim hailAbilities() As String = {"ice body", "snow cloak", "overcoat", "magic guard", "cloud nine"}
                         If hailAbilities.Contains(.OppPokemon.Ability.Name.ToLower()) = False Then
                             If .OppPokemon.HP > 0 Then
                                 Dim hailHP As Integer = CInt(.OppPokemon.MaxHP / 16)
@@ -5910,7 +5928,8 @@
 #End Region
 
 #Region "Switching"
-
+        Dim HasSwitchedInOwn As Boolean = False
+        Dim HasSwitchedInOpp As Boolean = False
         Public Sub SwitchOutOwn(ByVal BattleScreen As BattleScreen, ByVal SwitchInIndex As Integer, ByVal InsertIndex As Integer, Optional ByVal message As String = "")
             With BattleScreen
                 ChangeCameraAngel(1, True, BattleScreen)
@@ -6033,6 +6052,10 @@
                     .OppMagmaStorm = 0
                     .OppSandTomb = 0
                     .OppInfestation = 0
+
+                    If BattleScreen.OppPokemon.HasVolatileStatus(Pokemon.VolatileStatus.Infatuation) Then
+                        BattleScreen.OppPokemon.RemoveVolatileStatus(Pokemon.VolatileStatus.Infatuation)
+                    End If
                 End With
 
                 .OwnPokemon.Ability.SwitchOut(.OwnPokemon)
@@ -6078,6 +6101,7 @@
         End Sub
 
         Public Sub SwitchInOwn(ByVal BattleScreen As BattleScreen, ByVal NewPokemonIndex As Integer, ByVal FirstTime As Boolean, ByVal InsertIndex As Integer, Optional ByVal message As String = "")
+            HasSwitchedInOwn = True
             If FirstTime = False Then
                 Dim insertMessage As String = message
 
@@ -6364,6 +6388,9 @@
                     .OwnSandTomb = 0
                     .OwnInfestation = 0
 
+                    If BattleScreen.OwnPokemon.HasVolatileStatus(Pokemon.VolatileStatus.Infatuation) Then
+                        BattleScreen.OwnPokemon.RemoveVolatileStatus(Pokemon.VolatileStatus.Infatuation)
+                    End If
                 End With
             End With
 
@@ -6426,6 +6453,7 @@
         End Sub
 
         Public Sub SwitchInOpp(ByVal BattleScreen As BattleScreen, ByVal FirstTime As Boolean, ByVal index As Integer)
+            HasSwitchedInOpp = True
             If FirstTime = False Then
                 ChangeCameraAngel(1, False, BattleScreen)
                 BattleScreen.BattleQuery.Add(New TextQueryObject(BattleScreen.Trainer.Name & ": ""Come back, " & BattleScreen.OppPokemon.GetDisplayName() & "!"""))

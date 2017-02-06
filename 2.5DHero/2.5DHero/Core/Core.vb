@@ -40,13 +40,13 @@
 
 #If XNA Then
         If CommandLineArgHandler.ForceGraphics Then
-            window.Title = "[XNA] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " (FORCED GRAPHICS)"
+            window.Title = "[XNA] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " " & GameController.GAMEVERSION & " (FORCED GRAPHICS)"
         Else
             window.Title = "[XNA] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " " & GameController.GAMEVERSION
         End If
 #ElseIf MONOGAME Then
         If CommandLineArgHandler.ForceGraphics Then
-            window.Title = "[MonoGame] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " (FORCED GRAPHICS)"
+            window.Title = "[MonoGame] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " " & GameController.GAMEVERSION & " (FORCED GRAPHICS)"
         Else
             window.Title = "[MonoGame] " & GameController.GAMENAME & " " & GameController.GAMEDEVELOPMENTSTAGE & " " & GameController.GAMEVERSION
         End If
@@ -187,7 +187,7 @@
             CurrentScreen.Draw()
 
             If Not Core.Player Is Nothing Then
-                If Core.Player.IsGamejoltSave = True Then
+                If Core.Player.IsGameJoltSave = True Then
                     GameJolt.Emblem.DrawNewEmblems()
                 End If
                 Core.Player.DrawLevelUp()

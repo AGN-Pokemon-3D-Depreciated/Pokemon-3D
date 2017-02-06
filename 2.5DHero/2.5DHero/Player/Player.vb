@@ -571,7 +571,7 @@
         ''' 1. Encrypted OverWrite Save.
         ''' 2. OverWrite Save.
         ''' 3. Backup Save.
-        If filePrefix = "GAMEJOLTSAVE" Then
+        If filePrefix = "GAMEJOLTSAVE" AndAlso Core.GameOptions.DLC.Contains("Backup Save") Then
             If Not Directory.Exists(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID) Then
                 Directory.CreateDirectory(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID)
             End If
@@ -1582,30 +1582,32 @@
         filePrefix = newFilePrefix
 
         If IsGameJoltSave = True Then
-            If Not Directory.Exists(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID & "\Encrypted") Then
-                Directory.CreateDirectory(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID & "\Encrypted")
+            If Core.GameOptions.DLC.Contains("Backup Save") Then
+                If Not Directory.Exists(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID & "\Encrypted") Then
+                    Directory.CreateDirectory(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID & "\Encrypted")
+                End If
+
+                Dim OriginalHASH As String =
+                Encryption.EncryptString(GetApricornsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetBerriesData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetBoxData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetDaycareData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetHallOfFameData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetItemDataData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetItemsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetNPCDataData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetOptionsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetPartyData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetPlayerData(False), StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetPokedexData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetRegisterData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetRoamingPokemonData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetSecretBaseData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
+                Encryption.EncryptString(GetStatisticsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID))
+
+                File.WriteAllText(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID & "\Encrypted\Encrypted.dat",
+                                  OriginalHASH & "|" & Encryption.EncryptString(OriginalHASH, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)))
             End If
-
-            Dim OriginalHASH As String =
-            Encryption.EncryptString(GetApricornsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetBerriesData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetBoxData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetDaycareData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetHallOfFameData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetItemDataData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetItemsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetNPCDataData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetOptionsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetPartyData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetPlayerData(False), StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetPokedexData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetRegisterData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetRoamingPokemonData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetSecretBaseData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)) & "|" &
-            Encryption.EncryptString(GetStatisticsData, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID))
-
-            File.WriteAllText(GameController.GamePath & "\Backup Save\" & GameJoltSave.GameJoltID & "\Encrypted\Encrypted.dat",
-                              OriginalHASH & "|" & Encryption.EncryptString(OriginalHASH, StringObfuscation.Obfuscate(GameJoltSave.GameJoltID)))
 
             Dim APICallSave As New GameJolt.APICall(AddressOf SaveGameHelpers.CompleteGameJoltSave)
             AddHandler APICallSave.CallFails, Sub(ByVal ex As Exception)
@@ -2228,7 +2230,6 @@
                         Dim s As String = "version=2" & vbNewLine &
                                         "@Text.Show(Your repel effect wore off.)" & vbNewLine &
                                         ":end"
-
 
                         If Temp.LastUsedRepel > -1 Then
                             Dim haveItemLeft As Boolean = Inventory.GetItemAmount(Temp.LastUsedRepel) > 0
