@@ -28,7 +28,7 @@
             Dim MeasuredSize As Long = 0
 
             Dim files As New List(Of String)
-            Dim paths() As String = {"Content", "maps", "Scripts"}
+            Dim paths() As String = {"Content", "Maps", "Scripts"}
             Dim includeExt() As String = {".dat", ".poke", ".lua", ".trainer"}
 
             If RUNVALIDATION = True Then
