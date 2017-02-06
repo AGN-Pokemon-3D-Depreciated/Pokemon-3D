@@ -63,7 +63,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 1/6: Downloading XNA Installer";
+    Write-Host "Step 1/7: Downloading XNA Installer";
 
 
     $currentLocation = (Get-Location).ToString();
@@ -83,7 +83,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 2/6: Running Installers";
+    Write-Host "Step 2/7: Running Installers";
 
 
     Write-Host "  Extracting components from XNA 4.0 Refresh Installer.";
@@ -137,7 +137,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 3/6: Adding Extensions to Installed Versions of Visual Studio";
+    Write-Host "Step 3/7: Adding Extensions to Installed Versions of Visual Studio";
 
 
     $appName = "Visual Studio 2015";
@@ -156,7 +156,17 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 4/6: Cleanup";
+    Write-Host "Step 4/7: Restart";
+
+
+    Restart-Computer -Force
+
+    Start-Sleep -s 10
+
+
+    Write-Host "`r`n";
+
+    Write-Host "Step 5/7: Cleanup";
 
 
     Write-Host "  Deleting extracted temporary files.";
@@ -171,7 +181,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 5/6: Downloading GameJolt API";
+    Write-Host "Step 6/7: Downloading GameJolt API";
 
 
     $currentLocation = (Get-Location).ToString();
@@ -191,7 +201,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 6/6: Running Installers"
+    Write-Host "Step 7/7: Running Installers"
 
 
     Write-Host "  Extracting components from GameJolt API Installer.";
@@ -220,8 +230,8 @@ deploy:
   auth_token:
     secure: WqQZ3A0yfpGhgMsEO5+TVJLgJd7WoO9jLjnnHPJww5e0ikdES8hRY1rZCTbY00l/
   artifact: MonoGamePokemon,XNAPokemon
-  draft: false
-  prerelease: true
+  draft: true
+  prerelease: false
   force_update: true
   on:
     branch: master
