@@ -24,16 +24,13 @@ install:
         if((Test-Path $path) -eq $True) { Remove-Item $path -recurse; }
     }
 
-
     Function RunInstaller($path) {
         Start-Process -FilePath msiexec.exe -ArgumentList /i, $path, /quiet -Wait;
     }
 
-
     Function RunInstaller2([String]$path, [String]$extraOption) {
         Start-Process -FilePath msiexec.exe -ArgumentList /a, $path, /quiet, $extraOption -Wait;
     }
-
 
     Function InstallXna($appName, $pathToExe, $installLocation, $extensionCacheLocation, $version) {
       $vsInstalled = test-path "$pathToExe";
@@ -60,16 +57,11 @@ install:
       }
     }
 
-
     Write-Host "`r`n";
-
     Write-Host "Step 1/7: Downloading XNA Installer";
 
-
     $currentLocation = (Get-Location).ToString();
-
     $downloadLocation = ($currentLocation + "\XNAGS40_setup.exe");
-
 
     if((Test-Path $downloadLocation) -eq $False) {
         Write-Host "  Downloading XNA 4.0 Refresh Installer to $downloadLocation. This may take several minutes.";
@@ -80,114 +72,54 @@ install:
         Write-Host "  XNA 4.0 Refresh Installer already downloaded. Skipping download step.";
     }
 
-
     Write-Host "`r`n";
-
     Write-Host "Step 2/7: Running Installers";
 
-
     Write-Host "  Extracting components from XNA 4.0 Refresh Installer.";
-
     Start-Process -FilePath $downloadLocation -ArgumentList /extract:XNA, /quiet -Wait;
-
-
     Write-Host "  Running Redists.msi";
-
     RunInstaller("`"$currentLocation\XNA\redists.msi`"");
-
     $XnaInProgramFiles = "C:\Program Files (x86)\Microsoft XNA";
-
-
     Write-Host "  Running XLiveRedist.msi";
-
     RunInstaller("`"$XnaInProgramFiles\XNA Game Studio\v4.0\Setup\XLiveRedist.msi`"")
-
-
     Write-Host "  Running xnafx40_redist.msi";
-
     RunInstaller("`"$XnaInProgramFiles\XNA Game Studio\v4.0\Redist\XNA FX Redist\xnafx40_redist.msi`"")
-
-
     Write-Host "  Running xnaliveproxy.msi";
-
     RunInstaller("`"$XnaInProgramFiles\XNA Game Studio\v4.0\Setup\xnaliveproxy.msi`"")
-
-
     Write-Host "  Running xnags_platform_tools.msi";
-
     RunInstaller("`"$XnaInProgramFiles\XNA Game Studio\v4.0\Setup\xnags_platform_tools.msi`"")
-
-
     Write-Host "  Running xnags_shared.msi";
-
     RunInstaller("`"$XnaInProgramFiles\XNA Game Studio\v4.0\Setup\xnags_shared.msi`"")
-
-
     Write-Host "  Extracting extension files from xnags_visualstudio.msi";
-
     RunInstaller2 "`"$XnaInProgramFiles\XNA Game Studio\v4.0\Setup\xnags_visualstudio.msi`"" "TARGETDIR=C:\XNA-temp\ExtractedExtensions\"
-
-
     Write-Host "  Running arpentry.msi";
-
     RunInstaller("`"$currentLocation\XNA\arpentry.msi`"")
-
     $xnaLocation = ("C:\XNA-temp\ExtractedExtensions\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\Microsoft\XNA Game Studio 4.0");
 
-
     Write-Host "`r`n";
-
     Write-Host "Step 3/7: Adding Extensions to Installed Versions of Visual Studio";
 
-
     $appName = "Visual Studio 2015";
-
     $pathToExe = "${Env:VS140COMNTOOLS}..\IDE\devenv.exe";
-
     $installLocation = "${Env:VS140COMNTOOLS}..\IDE\Extensions\Microsoft";
-
     $extensionCacheLocation = "$home\AppData\Local\Microsoft\VisualStudio\14.0\Extensions";
-
     $version = "14.0";
-
-
+    
     InstallXna $appName $pathToExe $installLocation $extensionCacheLocation $version;
 
-
     Write-Host "`r`n";
-
-    Write-Host "Step 4/7: Restart";
-
-
-    Restart-Computer -Force
-
-    Start-Sleep -s 10
-
-
-    Write-Host "`r`n";
-
-    Write-Host "Step 5/7: Cleanup";
-
+    Write-Host "Step 4/7: Cleanup";
 
     Write-Host "  Deleting extracted temporary files.";
-
-
     RemoveIfExists("$currentLocation\XNA");
-
     RemoveIfExists("C:\XNA-temp\");
-
     RemoveIfExists("C:\xnags_visualstudio.msi");
 
-
     Write-Host "`r`n";
-
-    Write-Host "Step 6/7: Downloading GameJolt API";
-
+    Write-Host "Step 5/7: Downloading GameJolt API";
 
     $currentLocation = (Get-Location).ToString();
-
     $downloadLocation = ($currentLocation + "\2.5DHero.zip");
-
 
     if((Test-Path $downloadLocation) -eq $False) {
         Write-Host "  Downloading GameJolt API Installer to $downloadLocation. This may take several minutes.";
@@ -198,20 +130,21 @@ install:
         Write-Host "  GameJolt API Installer already downloaded. Skipping download step.";
     }
 
-
     Write-Host "`r`n";
-
-    Write-Host "Step 7/7: Running Installers"
-
+    Write-Host "Step 6/7: Running Installers";
 
     Write-Host "  Extracting components from GameJolt API Installer.";
-
     7z x -y $downloadLocation -o"$currentLocation"
+
+    Write-Host "`r`n";
+    Write-Host "Step 7/7: Running Installers"
+
+    Restart-Computer -Force
+    Start-Sleep -s 10
 cache: XNAGS40_setup.exe
 before_build:
 - cmd: >-
     git submodule update --init --recursive
-
     nuget restore 2.5DHero.sln
 build:
   project: 2.5DHero.sln
