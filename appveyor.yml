@@ -161,7 +161,12 @@ install:
 
 
     Restart-Computer -Force
-cache: XNAGS40_setup.exe
+cache:
+- XNAGS40_setup.exe
+- 2.5DHero/2.5DHero/obj/XNA
+- 2.5DHero/2.5DHero/obj/MonoGame/DesktopGL
+- 2.5DHero/2.5DHero/bin/XNA
+- 2.5DHero/2.5DHero/bin/MonoGame/DesktopGL
 before_build:
 - cmd: >-
     git submodule update --init --recursive
@@ -231,21 +236,21 @@ before_package:
 
     RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\PVRTexLibWrapper.dll")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.dll")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.dll")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.xml")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.xml")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Game.dll")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Game.dll")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Game.xml")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Game.xml")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.GamerServices.dll")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.GamerServices.dll")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.GamerServices.xml")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.GamerServices.xml")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Graphics.dll")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Graphics.dll")
     
-    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Graphics.xml")
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Graphics.xml")
     
     RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Input.Touch.dll")
     
