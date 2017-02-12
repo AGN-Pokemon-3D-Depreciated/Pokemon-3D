@@ -16,8 +16,7 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 environment:
-  GameJolt_API:
-    secure: pcggN1zw0wEHy8y0s6dDJtK4cJugjJQIE1jsUkK5BM+Y4MWD4PLIrOdj6clXXKR6oYgshYIhDLHIay6oMXsxzbQDtKlQzmJOWxwDy45ki5Y=
+  GameJolt_API: http://pokemon.aggressivegaming.org/upload/Pokemon%203D/2.5DHero.zip
 install:
 - ps: >-
     Function DownloadFile($url, $targetFile) {
@@ -160,7 +159,7 @@ install:
     Write-Host "Step 5/5: Restart";
 
 
-    Restart-Computer -Wait -For PowerShell -Timeout 300 -Delay 2 -Force
+    Restart-Computer -Force
 cache: XNAGS40_setup.exe
 before_build:
 - cmd: >-
