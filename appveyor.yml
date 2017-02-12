@@ -20,6 +20,30 @@ environment:
     secure: pcggN1zw0wEHy8y0s6dDJtK4cJugjJQIE1jsUkK5BM+Y4MWD4PLIrOdj6clXXKR6oYgshYIhDLHIay6oMXsxzbQDtKlQzmJOWxwDy45ki5Y=
 install:
 - ps: >-
+    Function DownloadFile($url, $targetFile) {
+       $uri = New-Object "System.Uri" "$url"
+       $request = [System.Net.HttpWebRequest]::Create($uri
+       $request.set_Timeout(15000)
+       $response = $request.GetResponse()
+       $totalLength = [System.Math]::Floor($response.get_ContentLength()/1024)
+       $responseStream = $response.GetResponseStream()
+       $targetStream = New-Object -TypeName System.IO.FileStream -ArgumentList $targetFile, Create
+       $buffer = new-object byte[] 10KB
+       $count = $responseStream.Read($buffer,0,$buffer.length
+       $downloadedBytes = $count
+       while ($count -gt 0) {
+           $targetStream.Write($buffer, 0, $count)
+           $count = $responseStream.Read($buffer,0,$buffer.length)
+           $downloadedBytes = $downloadedBytes + $count
+           Write-Progress -activity "Downloading file '$($url.split('/') | Select -Last 1)'" -status "Downloaded ($([System.Math]::Floor($downloadedBytes/1024))K of $($totalLength)K): " -PercentComplete ((([System.Math]::Floor($downloadedBytes/1024)) / $totalLength)  * 100)
+       }
+       Write-Progress -activity "Finished downloading file '$($url.split('/') | Select -Last 1)'"
+       $targetStream.Flush()
+       $targetStream.Close()
+       $responseStream.Dispose()
+    }
+
+
     Function RemoveIfExists($path) {
         if((Test-Path $path) -eq $True) { Remove-Item $path -recurse; }
     }
@@ -35,35 +59,9 @@ install:
     }
 
 
-    Function InstallXna($appName, $pathToExe, $installLocation, $extensionCacheLocation, $version) {
-      $vsInstalled = test-path "$pathToExe";
-
-      if($vsInstalled -eq $True) {
-        write-host "  $appName is installed on this machine. XNA will be added there.";
-
-        write-host "    Copying files.";
-        copy-item $xnaLocation $installLocation -recurse -force;
-
-        write-host "    Updating configuration for this version.";
-        $content = Get-Content ($installLocation + "\XNA Game Studio 4.0\extension.vsixmanifest");
-        $content = $content -replace "Version=`"10.0`">", "Version=`"$version`">`r`n        <Edition>WDExpress</Edition>";
-        $content | Out-File ($installLocation + "\XNA Game Studio 4.0\extension.vsixmanifest") -encoding ASCII;
-
-        write-host "    Clearing the extensions cache.";
-        RemoveIfExists($extensionCacheLocation);
-
-        write-host "    Rebuilding the extension cache. This may take a few minutes.";
-        Start-Process -FilePath $pathToExe -ArgumentList /setup -Wait
-
-        write-host "    Finished rebuilding cache.";
-        write-host "    XNA Game Studio 4.0 is now installed for $appName!";
-      }
-    }
-
-
     Write-Host "`r`n";
 
-    Write-Host "Step 1/7: Downloading XNA Installer";
+    Write-Host "Step 1/5: Downloading XNA Installer";
 
 
     $currentLocation = (Get-Location).ToString();
@@ -73,9 +71,7 @@ install:
 
     if((Test-Path $downloadLocation) -eq $False) {
         Write-Host "  Downloading XNA 4.0 Refresh Installer to $downloadLocation. This may take several minutes.";
-        $wc = New-Object System.Net.WebClient
-        $wc.DownloadFile("http://download.microsoft.com/download/E/C/6/EC68782D-872A-4D58-A8D3-87881995CDD4/XNAGS40_setup.exe", $downloadLocation)
-        Write-Host "  Download Complete.";
+        DownloadFile("http://download.microsoft.com/download/E/C/6/EC68782D-872A-4D58-A8D3-87881995CDD4/XNAGS40_setup.exe", $downloadLocation)
     } else {
         Write-Host "  XNA 4.0 Refresh Installer already downloaded. Skipping download step.";
     }
@@ -83,7 +79,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 2/7: Running Installers";
+    Write-Host "Step 2/5: Running Installers";
 
 
     Write-Host "  Extracting components from XNA 4.0 Refresh Installer.";
@@ -132,58 +128,18 @@ install:
 
     RunInstaller("`"$currentLocation\XNA\arpentry.msi`"")
 
-    $xnaLocation = ("C:\XNA-temp\ExtractedExtensions\Microsoft Visual Studio 10.0\Common7\IDE\Extensions\Microsoft\XNA Game Studio 4.0");
-
 
     Write-Host "`r`n";
 
-    Write-Host "Step 3/7: Adding Extensions to Installed Versions of Visual Studio";
+    Write-Host "Step 3/5: Downloading GameJolt API";
 
-
-    $appName = "Visual Studio 2015";
-
-    $pathToExe = "${Env:VS140COMNTOOLS}..\IDE\devenv.exe";
-
-    $installLocation = "${Env:VS140COMNTOOLS}..\IDE\Extensions\Microsoft";
-
-    $extensionCacheLocation = "$home\AppData\Local\Microsoft\VisualStudio\14.0\Extensions";
-
-    $version = "14.0";
-
-
-    InstallXna $appName $pathToExe $installLocation $extensionCacheLocation $version;
-
-
-    Write-Host "`r`n";
-
-    Write-Host "Step 4/7: Cleanup";
-
-
-    Write-Host "  Deleting extracted temporary files.";
-
-
-    RemoveIfExists("$currentLocation\XNA");
-
-    RemoveIfExists("C:\XNA-temp\");
-
-    RemoveIfExists("C:\xnags_visualstudio.msi");
-
-
-    Write-Host "`r`n";
-
-    Write-Host "Step 5/7: Downloading GameJolt API";
-
-
-    $currentLocation = (Get-Location).ToString();
 
     $downloadLocation = ($currentLocation + "\2.5DHero.zip");
 
 
     if((Test-Path $downloadLocation) -eq $False) {
         Write-Host "  Downloading GameJolt API Installer to $downloadLocation. This may take several minutes.";
-        $wc = New-Object System.Net.WebClient
-        $wc.DownloadFile("${env:GameJolt_API}", $downloadLocation)
-        Write-Host "  Download Complete.";
+        DownloadFile("${env:GameJolt_API}", $downloadLocation)
     } else {
         Write-Host "  GameJolt API Installer already downloaded. Skipping download step.";
     }
@@ -191,7 +147,7 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 6/7: Running Installers"
+    Write-Host "Step 4/5: Running Installers"
 
 
     Write-Host "  Extracting components from GameJolt API Installer.";
@@ -201,12 +157,10 @@ install:
 
     Write-Host "`r`n";
 
-    Write-Host "Step 7/7: Restart";
+    Write-Host "Step 5/5: Restart";
 
 
-    Restart-Computer -Force
-
-    Start-Sleep -s 10
+    Restart-Computer -Wait -For PowerShell -Timeout 300 -Delay 2 -Force
 cache: XNAGS40_setup.exe
 before_build:
 - cmd: >-
@@ -217,6 +171,65 @@ build:
   project: 2.5DHero.sln
   parallel: true
   verbosity: minimal
+before_package:
+- ps: >-
+    Function RemoveIfExists($path) {
+        if((Test-Path $path) -eq $True) { Remove-Item $path -recurse; }
+    }
+
+
+    Write-Host "`r`n";
+
+    Write-Host "Step 1/1: Removing extra build content.";
+
+
+    $currentLocation = (Get-Location).ToString();
+
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\References")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\2MGFX.exe")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\Assimp64.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\ffmpeg.exe")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\ffprobe.exe")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\FreeImage.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\freetype6.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\libmojoshader_64.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\nvtt.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\pvrtc.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\MonoGame\DesktopGL\Release\PVRTexLibWrapper.dll")
+
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\References")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\2MGFX.exe")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Assimp64.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\ffmpeg.exe")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\ffprobe.exe")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\FreeImage.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\freetype6.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\libmojoshader_64.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\nvtt.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\pvrtc.dll")
+
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\PVRTexLibWrapper.dll")
 test: off
 artifacts:
 - path: 2.5DHero/2.5DHero/bin/MonoGame/DesktopGL/Release
