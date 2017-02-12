@@ -230,11 +230,31 @@ before_package:
     RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\pvrtc.dll")
 
     RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\PVRTexLibWrapper.dll")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.dll")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.xml")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Game.dll")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Game.xml")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.GamerServices.dll")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.GamerServices.xml")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Graphics.dll")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.XNA.Framework.Graphics.xml")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Input.Touch.dll")
+    
+    RemoveIfExists($currentLocation + "\2.5DHero\2.5DHero\bin\XNA\Release\Microsoft.Xna.Framework.Input.Touch.xml")
 test: off
 artifacts:
-- path: 2.5DHero/2.5DHero/bin/MonoGame/DesktopGL/Release
+- path: 2.5DHero/2.5DHero/bin/MonoGame/DesktopGL
   name: MonoGamePokemon
-- path: 2.5DHero/2.5DHero/bin/XNA/Release
+- path: 2.5DHero/2.5DHero/bin/XNA
   name: XNAPokemon
 deploy:
 - provider: GitHub
