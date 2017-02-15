@@ -219,6 +219,7 @@
                 End If
             Next
             Me.OwnPokemon = Core.Player.Pokemons(meIndex)
+            OwnPokemonIndex = meIndex
 
             Me.IsTrainerBattle = False
             Me.ParticipatedPokemon.Add(meIndex)
@@ -352,6 +353,7 @@
                 End If
             Next
             Me.OwnPokemon = Core.Player.Pokemons(meIndex)
+            OwnPokemonIndex = meIndex
             If IsPVPBattle Then
                 OwnPokemon = Core.Player.Pokemons(OwnLeadIndex)
                 OwnPokemonIndex = OwnLeadIndex
@@ -444,6 +446,7 @@
 
             Battle.SwitchInOwn(Me, meIndex, True, OwnPokemonIndex)
             Battle.SwitchInOpp(Me, True, OppPokemonIndex)
+            TempPVPBattleQuery.Clear()
 
             Me.BattleQuery.AddRange({cq1, q5, cq2})
 
@@ -498,6 +501,7 @@
                 End If
             Next
             Me.OwnPokemon = Core.Player.Pokemons(meIndex)
+            OwnPokemonIndex = meIndex
 
             Me.IsTrainerBattle = False
             Me.ParticipatedPokemon.Add(meIndex)
@@ -614,6 +618,8 @@
                 End If
             Next
             Me.OwnPokemon = Core.Player.Pokemons(meIndex)
+            OwnPokemonIndex = meIndex
+
 
             Me.IsTrainerBattle = False
             Me.ParticipatedPokemon.Add(meIndex)
@@ -1337,6 +1343,7 @@ nextIndex:
             Dim tempData As String = ""
             Dim cData As String = data
 
+            'Converts the single string received as data into a list of queries (as string)
             While cData.Length > 0
                 If cData(0).ToString() = "|" AndAlso tempData(tempData.Length - 1).ToString() = "}" Then
                     newQueries.Add(tempData)
@@ -1358,7 +1365,9 @@ nextIndex:
             End While
 
             If s.Identification = Identifications.BattleScreen Then
-                CType(s, BattleScreen).LockData = newQueries(0)
+
+                'First set of queries are read and converted into BattleScreen values for the client side.
+                CType(s, BattleScreen).LockData = newQueries(0) 'when locked into certain situations that do not allow the client to take actions (like multi turn moves)
                 CType(s, BattleScreen).OppStatistics.FromString(newQueries(1))
                 CType(s, BattleScreen).OwnStatistics.FromString(newQueries(2))
                 CType(s, BattleScreen).OppPokemon = Pokemon.GetPokemonByData(newQueries(3))
@@ -1368,10 +1377,15 @@ nextIndex:
                 weatherInfo = weatherInfo.Remove(weatherInfo.Length - 1, 1).Remove(0, 1)
                 CType(s, BattleScreen).FieldEffects.Weather = CType(CInt(weatherInfo), BattleWeather.WeatherTypes)
 
-                For i = 0 To 5
+                Dim CanSwitchInfo As String = newQueries(6)
+                CanSwitchInfo = CanSwitchInfo.Remove(CanSwitchInfo.Length - 1, 1).Remove(0, 1)
+                CType(s, BattleScreen).FieldEffects.ClientCanSwitch = CType(CanSwitchInfo, Boolean)
+
+                For i = 0 To 6
                     newQueries.RemoveAt(0)
                 Next
 
+                'Next queries contain the data from the party of the host and the client.
                 Dim ownCount As Integer = Core.Player.Pokemons.Count
                 Dim oppCount As Integer = CType(s, BattleScreen).Trainer.Pokemons.Count
 
@@ -1491,7 +1505,8 @@ nextIndex:
             Dim d As String = lockData & "|" &
                               OwnStatistics.ToString() & "|" & OppStatistics.ToString() & "|" &
                               OwnPokemon.GetSaveData() & "|" & OppPokemon.GetSaveData() & "|" &
-                              "{" & CInt(FieldEffects.Weather).ToString() & "}"
+                              "{" & CInt(FieldEffects.Weather).ToString() & "}" & "|" &
+                              "{" & BattleCalculation.CanSwitch(Me, False).ToString & "}"
 
             For Each p As Pokemon In Core.Player.Pokemons
                 If d <> "" Then
