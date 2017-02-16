@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Pokemon 3D")>
 <Assembly: AssemblyDescription("Pokemon 3D")>
-<Assembly: AssemblyCompany("The Dialga Team")>
+<Assembly: AssemblyCompany("P3D Team")>
 <Assembly: AssemblyProduct("Pokemon 3D")>
-<Assembly: AssemblyCopyright("Copyright © Kolben 2012-2015, P3D Team 2016-2017, The Dialga Team 2016-2017")>
-<Assembly: AssemblyTrademark("The Dialga Team")>
+<Assembly: AssemblyCopyright("Copyright © Kolben 2012-2015, P3D Team 2016-2017")>
+<Assembly: AssemblyTrademark("P3D Team")>
 
 <Assembly: ComVisible(False)>
 

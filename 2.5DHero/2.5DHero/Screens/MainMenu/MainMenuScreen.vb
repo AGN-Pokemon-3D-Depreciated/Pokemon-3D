@@ -1,5 +1,6 @@
 ﻿Imports System.Net
 Imports System.Net.Cache
+Imports System.Threading.Tasks
 
 Public Class MainMenuScreen
 
@@ -82,19 +83,27 @@ Public Class MainMenuScreen
         GameJolt.Emblem.ClearOnlineSpriteCache()
         Screen.Level.World.Initialize(Screen.Level.EnvironmentType, Screen.Level.WeatherType)
 
+        UpdateCheck()
+    End Sub
+
+    Private Sub UpdateCheck()
         Try
             If Not GameController.UpdateChecked Then
                 Logger.Debug("---Check Version---")
 
-                Dim Updater As New Process()
-                Updater.StartInfo = New ProcessStartInfo("Updater.exe")
-                Updater.Start()
-                Updater.WaitForExit()
+                If Not Core.GameOptions.UpdateDisabled AndAlso My.Computer.Network.IsAvailable Then
+                    Task.Factory.StartNew(Sub()
+                                              Dim Updater As New Process()
+                                              Updater.StartInfo = New ProcessStartInfo("Updater.exe")
+                                              Updater.Start()
+                                              Updater.WaitForExit()
 
-                If Updater.ExitCode = 1 Then
-                    Environment.Exit(0)
-                Else
-                    GameController.UpdateChecked = True
+                                              If Updater.ExitCode = 1 Then
+                                                  Core.GameInstance.Exit()
+                                              Else
+                                                  GameController.UpdateChecked = True
+                                              End If
+                                          End Sub)
                 End If
             End If
         Catch ex As Exception

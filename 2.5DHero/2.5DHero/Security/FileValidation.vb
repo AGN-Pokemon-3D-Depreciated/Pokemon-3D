@@ -6,8 +6,8 @@
         Shared _valid As Boolean = False
 
         Const RUNVALIDATION As Boolean = False
-        Const EXPECTEDSIZE As Integer = 42307725
-        Const METAHASH As String = "MkYwNzRGMkIxMzE4Qzg0MTM1RDk1QkQ5MTMyRkVGMzY="
+        Const EXPECTEDSIZE As Integer = 42417354
+        Const METAHASH As String = "RUM3N0U1REM0NzREQjkzRUU2MEE1NDk2MUQxNDU5NDU="
 
         Public Shared ReadOnly Property IsValid(ByVal ForceResult As Boolean) As Boolean
             Get
@@ -28,7 +28,7 @@
             Dim MeasuredSize As Long = 0
 
             Dim files As New List(Of String)
-            Dim paths() As String = {"Content", "Maps", "Scripts"}
+            Dim paths() As String = {"Content", "maps", "Scripts"}
             Dim includeExt() As String = {".dat", ".poke", ".lua", ".trainer"}
 
             If RUNVALIDATION = True Then
