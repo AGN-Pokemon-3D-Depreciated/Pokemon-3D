@@ -3,7 +3,9 @@ pull_requests:
   do_not_increment_build_number: true
 skip_tags: true
 configuration: Release
-platform: XNA
+platform:
+- DesktopGL
+- XNA
 clone_depth: 1
 init:
 - cmd: git config --global core.autocrlf true
