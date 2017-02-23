@@ -377,7 +377,6 @@
             End If
         End SyncLock
 
-
         CameraDistance = CalculateCameraDistance(CPosition)
         
         If Me.DropUpdateUnlessDrawn = True And Me.DrawnLastFrame = False And Me.Visible = True And ActionScriptActive = False Then

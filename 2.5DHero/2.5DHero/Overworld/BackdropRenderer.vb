@@ -154,33 +154,31 @@
         End Sub
 
         Public Sub Draw(ByVal Indicies As Short())
-            Dim vBuffer As New VertexBuffer(Core.GraphicsDevice, VertexPositionNormalTangentTexture.VertexDeclaration, _vertices.Count, BufferUsage.None)
-            Dim iBuffer As New IndexBuffer(Core.GraphicsDevice, GetType(Short), Indicies.Count, BufferUsage.None)
+            Using vBuffer As New VertexBuffer(Core.GraphicsDevice, VertexPositionNormalTangentTexture.VertexDeclaration, _vertices.Count, BufferUsage.None)
+                Using iBuffer As New IndexBuffer(Core.GraphicsDevice, GetType(Short), Indicies.Count, BufferUsage.None)
+                    vBuffer.SetData(_vertices.ToArray())
+                    iBuffer.SetData(Indicies)
 
-            vBuffer.SetData(Of VertexPositionNormalTangentTexture)(_vertices.ToArray())
-            iBuffer.SetData(Of Short)(Indicies)
+                    _shader.Parameters("World").SetValue(_worldMatrix)
+                    _shader.CurrentTechnique = _shader.Techniques("Texture")
+                    _shader.Parameters("View").SetValue(Screen.Camera.View)
+                    _shader.Parameters("Projection").SetValue(Screen.Camera.Projection)
+                    _shader.Parameters("DiffuseColor").SetValue(GetDiffuseColor())
+                    _shader.Parameters("TexStretch").SetValue(New Vector2(Me._height, Me._width))
+                    _shader.Parameters("color").SetValue(_backdropTexture)
 
-            _shader.Parameters("World").SetValue(_worldMatrix)
-            _shader.CurrentTechnique = _shader.Techniques("Texture")
-            _shader.Parameters("View").SetValue(Screen.Camera.View)
-            _shader.Parameters("Projection").SetValue(Screen.Camera.Projection)
-            _shader.Parameters("DiffuseColor").SetValue(GetDiffuseColor())
-            _shader.Parameters("TexStretch").SetValue(New Vector2(Me._height, Me._width))
-            _shader.Parameters("color").SetValue(_backdropTexture)
-
-            For Each pass As EffectPass In _shader.CurrentTechnique.Passes
-                pass.Apply()
-                GraphicsDevice.SetVertexBuffer(vBuffer)
-                GraphicsDevice.Indices = iBuffer
+                    For Each pass As EffectPass In _shader.CurrentTechnique.Passes
+                        pass.Apply()
+                        GraphicsDevice.SetVertexBuffer(vBuffer)
+                        GraphicsDevice.Indices = iBuffer
 #If XNA Then
-                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count, 0, Indicies.Count)
+                        GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count, 0, Indicies.Count)
 #Else
-                GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count)
+                        GraphicsDevice.DrawIndexedPrimitives(PrimitiveType.TriangleList, 0, 0, _vertices.Count)
 #End If
-            Next
-
-            vBuffer.Dispose()
-            iBuffer.Dispose()
+                    Next
+                End Using
+            End Using
         End Sub
 
         Private Function GetDiffuseColor() As Vector4
@@ -189,9 +187,9 @@
 
             If Not Screen.Level.World Is Nothing Then
                 Select Case Screen.Level.World.EnvironmentType
-                    Case net.Pokemon3D.Game.World.EnvironmentTypes.Outside
+                    Case World.EnvironmentTypes.Outside
                         dayColor = SkyDome.GetDaytimeColor(True).ToVector3()
-                    Case net.Pokemon3D.Game.World.EnvironmentTypes.Dark
+                    Case World.EnvironmentTypes.Dark
                         dayColor = New Vector3(0.5F, 0.5F, 0.6F)
                 End Select
             End If
