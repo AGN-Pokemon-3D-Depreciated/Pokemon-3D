@@ -1382,9 +1382,9 @@
             'Own Pokémon move animation! This displays any effects that should display on the user of the move.
             moveUsed.UserPokemonMoveAnimation(BattleScreen)
 
-            Dim cam As QueryObject = BattleScreen.FocusBattle()
-            CType(cam, CameraQueryObject).SetTargetToStart()
-            BattleScreen.BattleQuery.AddRange({cam, New MoveAnimationQueryObject()})
+            'Dim cam As QueryObject = BattleScreen.FocusBattle()
+            'CType(cam, CameraQueryObject).SetTargetToStart()
+            'BattleScreen.BattleQuery.AddRange({cam, New MoveAnimationQueryObject()})
 
             If moveUsed.Target <> Attack.Targets.Self And moveUsed.FocusOppPokemon = True Then
                 If own = True Then
@@ -1400,7 +1400,7 @@
                     Dim fa2 As New ScreenFadeQueryObject(ScreenFadeQueryObject.FadeTypes.CloseLeft, Color.Black, False, 110)
                     BattleScreen.BattleQuery.AddRange({fa1, ca, fa2})
                 End If
-                'ChangeCameraAngel(2, own, BattleScreen)
+                ChangeCameraAngel(2, own, BattleScreen)
             End If
 
             Dim DoesNotMiss As Boolean = BattleCalculation.AccuracyCheck(moveUsed, own, BattleScreen)

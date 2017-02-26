@@ -805,6 +805,8 @@ Public Class Level
                             Entities(i).Update()
                         End If
                     End If
+
+                    Me.Entities(i).UpdateEntity()
                 Else
                     Exit For
                 End If
@@ -812,11 +814,11 @@ Public Class Level
         End If
 
         ' UpdateEntity for all entities:
-        For i = 0 To Me.Entities.Count - 1
-            If i <= Me.Entities.Count - 1 Then
-                Me.Entities(i).UpdateEntity()
-            End If
-        Next
+        'For i = 0 To Me.Entities.Count - 1
+        '    If i <= Me.Entities.Count - 1 Then
+        '        Me.Entities(i).UpdateEntity()
+        '    End If
+        'Next
 
         ' UpdateEntity for all floors:
         For i = 0 To Me.Floors.Count - 1
